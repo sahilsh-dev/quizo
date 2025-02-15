@@ -9,3 +9,20 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Teacher {
+  id        Int      @id @default(autoincrement())
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  quizzes   Quiz[]
+}
+
+model Quiz {
+  id        Int      @id @default(autoincrement())
+  question  String
+  answer    String
+  teacherId Int
+  createdAt DateTime @default(now())
+  Teacher   Teacher  @relation(fields: [teacherId], references: [id])
+}
