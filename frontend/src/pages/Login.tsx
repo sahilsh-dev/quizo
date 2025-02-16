@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -11,18 +12,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import api from "@/api";
 
 export default function Login() {
   const [username, setUsername] = useState("teacher");
   const [password, setPassword] = useState("password");
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (username.trim() && password.trim()) {
-      navigate("/dashboard");
-    } else {
-      alert("Invalid credentials");
+  const handleLogin = async (e: React.FormEvent) => {
+    try {
+      e.preventDefault();
+      if (username.trim() && password.trim()) {
+        const res = await api.post("/login", { username, password });
+        toast(res.data.message);
+        localStorage.setItem("token", res.data.token);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      alert("Invalid username or password");
     }
   };
 

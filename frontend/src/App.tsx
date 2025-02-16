@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "@/components/ui/sonner";
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -11,6 +11,7 @@ function App() {
           <Route path="/" element={<Login />} />
         </Routes>
       </BrowserRouter>
+      <Toaster />
     </ThemeProvider>
   );
 }
