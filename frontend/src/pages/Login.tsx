@@ -24,8 +24,8 @@ export default function Login() {
       e.preventDefault();
       if (username.trim() && password.trim()) {
         const res = await api.post("/login", { username, password });
-        toast(res.data.message);
         localStorage.setItem("token", res.data.token);
+        toast(res.data.message);
         navigate("/dashboard");
       }
     } catch (error) {
