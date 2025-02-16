@@ -1,13 +1,16 @@
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import { Button } from "@/components/ui/button";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="max-w-md m-auto text-center">
-        <h1>Hello, world!</h1>
-        <Button>Click me</Button>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
