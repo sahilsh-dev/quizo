@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,19 +15,28 @@ import {
 import api from "@/api";
 
 export default function CreateEditQuiz() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const location = useLocation();
+  const [title, setTitle] = useState(location.state?.title || "");
+  const [description, setDescription] = useState(
+    location.state?.description || "",
+  );
   const { id } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (id) {
-      // Here you would typically fetch the quiz data from your API
-      // For demo purposes, we're setting dummy data
-      setTitle("Existing Quiz Title");
-      setDescription("Existing Quiz Description");
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim() || !description.trim()) {
+      toast("Title and description are required");
+      return;
     }
-  }, [id]);
+    try {
+      await api.put(`/quizzes/${id}`, { title, description });
+      toast("Quiz updated successfully");
+    } catch {
+      toast.error("Error updating quiz");
+    }
+    navigate("/dashboard");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,9 +84,11 @@ export default function CreateEditQuiz() {
           </form>
         </CardContent>
         <CardFooter>
-          <Button onClick={handleSubmit}>
-            {id ? "Update Quiz" : "Create Quiz"}
-          </Button>
+          {id ? (
+            <Button onClick={handleUpdate}>"Update Quiz"</Button>
+          ) : (
+            <Button onClick={handleSubmit}>"Create Quiz"</Button>
+          )}
         </CardFooter>
       </Card>
     </div>

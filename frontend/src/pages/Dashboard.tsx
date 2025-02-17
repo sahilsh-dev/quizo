@@ -37,7 +37,11 @@ export default function Dashboard() {
   }, []);
 
   const handleEdit = (id: number) => {
-    navigate(`/edit-quiz/${id}`);
+    const curQuiz = quizzes.find((quiz) => quiz.id === id);
+    if (!curQuiz) return;
+    navigate(`/edit-quiz/${id}`, {
+      state: { title: curQuiz.title, description: curQuiz.description },
+    });
   };
 
   const handleDelete = async (id: number) => {
