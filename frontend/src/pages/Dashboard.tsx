@@ -40,8 +40,13 @@ export default function Dashboard() {
     navigate(`/edit-quiz/${id}`);
   };
 
-  const handleDelete = (id: number) => {
-    // Here you would typically call your API to delete the quiz
+  const handleDelete = async (id: number) => {
+    try {
+      api.delete(`/quizzes/${id}`);
+      toast("Quiz deleted successfully");
+    } catch {
+      toast.error("Error deleting quiz");
+    }
     setQuizzes(quizzes.filter((quiz) => quiz.id !== id));
   };
 
