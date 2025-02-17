@@ -26,7 +26,6 @@ export default function Dashboard() {
     const fetchQuizzes = async () => {
       try {
         const res = await api.get("/quizzes");
-        console.log(res.data);
         if (res.data) {
           setQuizzes(res.data);
         }

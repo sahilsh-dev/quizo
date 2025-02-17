@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -11,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import api from "@/api";
 
 export default function CreateEditQuiz() {
   const [title, setTitle] = useState("");
@@ -27,14 +29,18 @@ export default function CreateEditQuiz() {
     }
   }, [id]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) {
-      alert("Title and description are required");
+      toast("Title and description are required");
       return;
     }
-    // Here you would typically call your API to create or update the quiz
-    console.log({ title, description });
+    try {
+      await api.post("/quizzes", { title, description });
+      toast("New Quiz created successfully");
+    } catch {
+      toast.error("Error creating quiz");
+    }
     navigate("/dashboard");
   };
 
